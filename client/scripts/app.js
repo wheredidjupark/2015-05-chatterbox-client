@@ -4,19 +4,41 @@
 var app = {
 
     "init": function() {
-    	retrieve();
-        setInterval(retrieve, 3000);
+
+        //retrieve();
+        //setInterval(retrieve, 3000);
+        app.retrieve();
+        setInterval(app.retrieve, 3000);
     },
 
     "messages": null,
 
-//update the chatterbox app with latest messages (only once)
+    //update the chatterbox app with latest messages (only once)
     "update": function(messages) {
 
         $("#messages").html("");
         _.each(messages, function(msg) {
             //convert each msg into a container
             $("#messages").append(messagePackager(msg));
+        });
+    },
+
+    "retrieve": function() {
+        $.ajax({
+            url: 'https://api.parse.com/1/classes/chatterbox',
+
+            type: 'GET',
+
+            success: function(data) {
+                console.log('chatterbox: Message retrieved');
+                //console.log(data); //look at the data retrieved
+                app.messages = data.results;
+                app.update(app.messages);
+            },
+            error: function(data) {
+                // see: https://developer.mozilla.org/en-US/docs/Web/API/console.error
+                console.error('chatterbox: Failed to retrieve messages');
+            }
         });
     }
 };
@@ -31,27 +53,6 @@ var messagePackager = function(msg) {
     message.append(text);
 
     return message;
-};
-
-
-//retrieve data from the server and update the chatterbox with latest messages
-var retrieve = function() {
-    $.ajax({
-        url: 'https://api.parse.com/1/classes/chatterbox',
-
-        type: 'GET',
-
-        success: function(data) {
-            console.log('chatterbox: Message retrieved');
-            //console.log(data); //look at the data retrieved
-            app.messages = data.results;
-            app.update(app.messages);
-        },
-        error: function(data) {
-            // see: https://developer.mozilla.org/en-US/docs/Web/API/console.error
-            console.error('chatterbox: Failed to retrieve messages');
-        }
-    });
 };
 
 
