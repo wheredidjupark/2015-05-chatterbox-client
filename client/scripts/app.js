@@ -1,28 +1,51 @@
 // YOUR CODE HERE:
 
+
+var app = {
+
+    "init": function() {
+    	retrieve();
+        setInterval(retrieve, 3000);
+    },
+
+    "messages": null,
+
+//update the chatterbox app with latest messages (only once)
+    "update": function(messages) {
+
+        $("#messages").html("");
+        _.each(messages, function(msg) {
+            //convert each msg into a container
+            $("#messages").append(messagePackager(msg));
+        });
+    }
+};
+
+//convert msg into a proper HTML container
+var messagePackager = function(msg) {
+    var message = $("<div class=\"message\"> </div>");
+    var user = $("<div class=\"messageUser\">" + msg.username + "</div>");
+    var text = $("<div class=\"messageText\">" + msg.text + "</div>");
+
+    message.append(user);
+    message.append(text);
+
+    return message;
+};
+
+
+//retrieve data from the server and update the chatterbox with latest messages
 var retrieve = function() {
     $.ajax({
-        // always use this url
         url: 'https://api.parse.com/1/classes/chatterbox',
+
         type: 'GET',
+
         success: function(data) {
-            //var parse = JSON.parse(data);
-
-            //$("#messages").append(JSON.parse(data));
-
-            console.log('chatterbox: Message received');
-            console.log(data);
-
-            var results = data.results;
-            $("messages").html("");
-
-            for (var i = 0; i < results.length; i++) {
-                $("#messages").append(results[i].text);
-            }
-
-            //$("#messages").append(data.results[0][text]);
-
-            //we now know we are receiving proper data.
+            console.log('chatterbox: Message retrieved');
+            //console.log(data); //look at the data retrieved
+            app.messages = data.results;
+            app.update(app.messages);
         },
         error: function(data) {
             // see: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -33,8 +56,12 @@ var retrieve = function() {
 
 
 
+//features we need:
+//clear the page whenever we fetch new messages
+
+
 $(document).ready(function() {
-    retrieve();
+    app.init();
 });
 
 
