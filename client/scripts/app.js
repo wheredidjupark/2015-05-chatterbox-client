@@ -40,20 +40,29 @@ var app = {
                 console.error('chatterbox: Failed to retrieve messages');
             }
         });
+    },
+    "friends": {},
+    "addFriend": function() {
+        $("#messages").on("click", ".messageUser", function(event) {
+            var friendName = $(this).text(); //a way to retrieve the username
+            app.friends[friendName] = !app.friends[friendName];
+            console.log("successfully added");
+        });
     }
 };
 
 //convert msg into a proper HTML container
 var messagePackager = function(msg) {
-    var message = $("<div class=\"message\"> </div>");
-    var user = $("<div class=\"messageUser\">" + msg.username + "</div>");
-    var text = $("<div class=\"messageText\">" + msg.text + "</div>");
+    var $message = $("<div class=\"message\"> </div>");
+    var $user = $("<div class=\"messageUser\">" + msg.username + "</div>");
+    var $text = $("<div class=\"messageText\">" + msg.text + "</div>");
 
-    message.append(user);
-    message.append(text);
+    $message.append($user);
+    $message.append($text);
 
-    return message;
+    return $message;
 };
+
 
 
 
@@ -63,6 +72,8 @@ var messagePackager = function(msg) {
 
 $(document).ready(function() {
     app.init();
+    app.addFriend();
+
 });
 
 

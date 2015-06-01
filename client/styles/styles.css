@@ -88,3 +88,7 @@ form input[type=text] {
     margin: 10px;
     background-color: #eeeeee;
 }
+
+.friend{
+    color: orange;
+}
