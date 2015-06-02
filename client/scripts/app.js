@@ -2,13 +2,13 @@
 
 
 var app = {
+	"username": null,
 
     "init": function() {
-
-        //retrieve();
-        //setInterval(retrieve, 3000);
+        app.username = prompt("What is your username?");
         app.retrieve();
         setInterval(app.retrieve, 3000);
+        app.addFriend();
     },
 
     "messages": null,
@@ -26,9 +26,7 @@ var app = {
     "retrieve": function() {
         $.ajax({
             url: 'https://api.parse.com/1/classes/chatterbox',
-
             type: 'GET',
-
             success: function(data) {
                 console.log('chatterbox: Message retrieved');
                 //console.log(data); //look at the data retrieved
@@ -72,7 +70,6 @@ var messagePackager = function(msg) {
 
 $(document).ready(function() {
     app.init();
-    app.addFriend();
 
 });
 
