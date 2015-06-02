@@ -14,7 +14,8 @@ var appData = {
     username: null,
     roomname: null,
     messages: null,
-    friends: {}
+    friends: {},
+    server:'https://api.parse.com/1/classes/chatterbox'
 };
 
 
@@ -46,11 +47,11 @@ var app = {
     //gets messages from the server and updates the app to include latest messages
     "get": function() {
         $.ajax({
-            url: 'https://api.parse.com/1/classes/chatterbox',
+            url: appData.server,
             type: 'GET',
             success: function(data) {
                 console.log('chatterbox: Message retrieved');
-                //console.log(data); //look at the data retrieved
+                console.log(data); //look at the data retrieved
                 //upon success, update the application.
                 appData.messages = data.results;
                 app.update(appData.messages);
@@ -94,7 +95,7 @@ var app = {
     //posts message to the server
     "post": function(msg) {
         $.ajax({
-            url: "https://api.parse.com/1/classes/chatterbox",
+            url: appData.server,
             type: "POST",
             data: JSON.stringify(msg),
             contentTYPE: "application/json",
